@@ -1,6 +1,10 @@
-<?php
+<?
 
-class Controller
+namespace Narrit\Core\Controller;
+
+use \Narrit\Core\CoreFunctions;
+
+class DefaultController extends CoreFunctions
 {
     var $vars = [];
     var $layout = "default";
@@ -12,7 +16,8 @@ class Controller
      */
     function __construct()
     {
-        $modelName = $this->getModelOfClassname();
+        parent::__construct();
+        $modelName = $this->getModelnameOfClassname();
         $this->loadModel($modelName);
     }
 
@@ -24,7 +29,6 @@ class Controller
      */
     private function loadModel($modelName)
     {
-
         require(ROOT . 'Models/' . $modelName . '.php');
         $this->model = new $modelName();
         $modelNameSmall = strtolower($modelName);
@@ -32,29 +36,19 @@ class Controller
     }
 
     /**
-     * Replaced unnecessary parts of the string.
-     * Returns the model name
-     *
-     * @return mixed|string
+     * sets the variables for the template-variables
+     * @param $variables
      */
-    protected function getModelOfClassname()
+    function setVariables($variables)
     {
-        $className = get_class($this);
-        $modelName = str_replace("Controller", "", $className);
-        $modelName = ucfirst($modelName);
-        return $modelName;
-    }
-
-    function set($d)
-    {
-        $this->vars = array_merge($this->vars, $d);
+        $this->vars = array_merge($this->vars, $variables);
     }
 
     function render($filename)
     {
         extract($this->vars);
         ob_start();
-        require(ROOT . "Views/" . ucfirst(str_replace('Controller', '', get_class($this))) . '/' . $filename . '.php');
+        require(ROOT . "Views/" . $this->getModelnameOfClassname() . '/' . $filename . '.php');
         $content_for_layout = ob_get_clean();
 
         if ($this->layout == false) {
@@ -64,20 +58,14 @@ class Controller
         }
     }
 
-    private
-    function secure_input(
-        $data
-    ) {
+    private function secure_input( $data ) {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
         return $data;
     }
 
-    protected
-    function secure_form(
-        $form
-    ) {
+    protected function secure_form( $form ) {
         foreach ($form as $key => $value) {
             $form[$key] = $this->secure_input($value);
         }

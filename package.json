@@ -15,7 +15,7 @@
     "url": "https://github.com/Relpat/narrit_site.git"
   },
   "dependencies": {
-    "composer": "^4.1.0",
-    "bootstrap": "^4.3.1"
+    "bootstrap": "^4.3.1",
+    "composer": "^4.1.0"
   }
 }

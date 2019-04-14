@@ -1,5 +1,6 @@
 <?php
-class Task extends Model
+
+class Story extends DefaultModel
 {
     public function create($title, $description)
     {
@@ -10,23 +11,29 @@ class Task extends Model
         return $req->execute([
             'title' => $title,
             'description' => $description,
-            'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
-
         ]);
     }
 
-    public function showTask($id)
+    public function findById($id)
     {
-        $sql = "SELECT * FROM tasks WHERE id =" . $id;
+        $sql = "SELECT *
+                FROM story
+                  JOIN pages ON pages.story_id = story.id
+                  JOIN partials on partials.pages_id = pages.id
+                WHERE story.id = ".$id;
         $req = Database::getBdd()->prepare($sql);
         $req->execute();
-        return $req->fetch();
+        return $req->fetchAll();
     }
 
-    public function showAllTasks()
+    public function getAll()
     {
-        $sql = "SELECT * FROM tasks";
+        $sql = "
+        SELECT * FROM partials 
+            RIGHT JOIN pages ON pages . pages_id = partials . pages_id 
+            RIGHT JOIN story ON pages . pages_id = story . pages_id
+        WHERE story . user_id = 1
+          ";
         $req = Database::getBdd()->prepare($sql);
         $req->execute();
         return $req->fetchAll();
@@ -43,15 +50,8 @@ class Task extends Model
             'title' => $title,
             'description' => $description,
             'updated_at' => date('Y-m-d H:i:s')
-
         ]);
     }
-
-    public function delete($id)
-    {
-        $sql = 'DELETE FROM tasks WHERE id = ?';
-        $req = Database::getBdd()->prepare($sql);
-        return $req->execute([$id]);
-    }
 }
+
 ?>

@@ -1,5 +1,5 @@
 <?php
-use \Narrit\Core\Controller\DefaultController;
+use  \Narrit\Core\Controller\DefaultController;
 
 class storyController extends DefaultController
 {
@@ -25,6 +25,8 @@ class storyController extends DefaultController
 
     function read($id){
         $modelInformation = $this->story->findById($id);
+
+        $this->_DEBUG->debug($modelInformation);
 
         $modelName = strtolower($this->getModelnameOfClassname());
         $templateVars[$modelName] = $modelInformation;
