@@ -28,9 +28,8 @@ function CaeserChiffre() {
 
     function _setCurrentText(readText) {
         currentText = readText;
-        if (debugmode) {
-            buggy.message(arguments, "currentText", currentText);
-        }
+        buggy.enableDebugTrace();
+        buggy.message(arguments, "currentText", currentText);
     }
 
     function _parseText() {
@@ -46,11 +45,7 @@ function CaeserChiffre() {
     function _init(config) {
         buggy.message(arguments, "Start CaesarChiffre with config", config);
         editForm = config.editForm;
-        if (debugmode) {
-            buggy = new Buggy();
-        }
 
-        buggy.message(arguments, "Schwubbel");
         // make html-content editable
         $(".cchiff-editable").attr("contenteditable", true);
 
@@ -251,47 +246,5 @@ function CaeserChiffre() {
         init: (function (config) {
             _init(config)
         })
-    }
-}
-
-
-/**
- * easy debugger
- * @constructor
- */
-function Buggy() {
-    console.log("Buggy enabled");
-    let that = this;
-
-    function _getCurrentNameByArgument(args) {
-        let myName = args.callee.toString();
-        myName = myName.substr('function '.length);
-        myName = myName.substr(0, myName.indexOf('('));
-        return myName;
-    }
-
-    function _message(args) {
-        let argumentArray = Array.from(arguments);
-        if (argumentArray.length) {
-
-            let outputArray = [];
-            for (let i = 1; i < arguments.length; i++) {
-                outputArray.push(arguments[i]);
-            }
-            console.log(_getTimeHHMMSSMS(), _getCurrentNameByArgument(arguments[0]) + ": ", outputArray);
-        }
-    }
-
-    function _getTimeHHMMSSMS() {
-        date = new Date();
-        hh = date.getHours()
-        mm = date.getMinutes();
-        ss = date.getSeconds();
-        ms = date.getMilliseconds();
-        return (hh + ":" + mm + ":" + ss + "." + ms);
-    }
-
-    return {
-        message: _message,
     }
 }

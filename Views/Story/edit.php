@@ -58,5 +58,6 @@ $this->_DEBUG->debug($story,"story");
     })
 </script>
 
+<script src="/assets/js/caesarchiffre/Buggy.js"></script>
 <script src="/assets/js/caesarchiffre/cchiffre.js"></script>
 <script src="/assets/js/narrit.js"></script>
