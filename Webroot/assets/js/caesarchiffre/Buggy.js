@@ -4,6 +4,7 @@
  * @constructor
  */
 function Buggy() {
+    this.enableTraceOnce = false;
     this.enableTrace = false;
     console.log("Buggy enabled");
     let that = this;
@@ -22,12 +23,24 @@ function Buggy() {
             for (let i = 1; i < arguments.length; i++) {
                 outputArray.push(arguments[i]);
             }
-            console.log("-----------------------------------------------------[Time: "+_getTimeHHMMSSMS()+"]");
-            console.log( outputArray);
-            if(that.enableTrace){
-                console.trace()
-                that.enableTrace = false;
+
+            let groupName = "";
+            if(typeof arguments[1] === "string"){
+                groupName = arguments[1];
+            }else{
+                groupName = _getCurrentNameByArgument(arguments[0])
             }
+            console.groupCollapsed(groupName,", "+ _getTimeHHMMSSMS());
+
+            console.log( outputArray);
+
+            if(that.enableTraceOnce || that.enableTrace){
+                console.trace()
+                if(that.enableTraceOnce){
+                    that.enableTraceOnce = false;
+                }
+            }
+            console.groupEnd();
         }
     }
 
@@ -40,12 +53,12 @@ function Buggy() {
         return (hh + ":" + mm + ":" + ss + "." + ms);
     }
 
-    function _enableDebugTrace (){
-        that.enableTrace = true;
+    function _enableDebugTraceOnce (){
+        that.enableTraceOnce = true;
     }
 
     return {
         message: _message,
-        enableDebugTrace : _enableDebugTrace
+        enableDebugTraceOnce : _enableDebugTraceOnce
     }
 }

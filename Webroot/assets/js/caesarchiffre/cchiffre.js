@@ -28,7 +28,7 @@ function CaeserChiffre() {
 
     function _setCurrentText(readText) {
         currentText = readText;
-        buggy.enableDebugTrace();
+        buggy.enableDebugTraceOnce();
         buggy.message(arguments, "currentText", currentText);
     }
 
