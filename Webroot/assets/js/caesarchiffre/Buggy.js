@@ -19,20 +19,22 @@ function Buggy() {
     function _message(args) {
         let argumentArray = Array.from(arguments);
         if (argumentArray.length) {
-            let outputArray = [];
-            for (let i = 1; i < arguments.length; i++) {
-                outputArray.push(arguments[i]);
-            }
 
+            let nameWasGiven = false;
             let groupName = "";
             if(typeof arguments[1] === "string"){
+                nameWasGiven = true;
                 groupName = arguments[1];
             }else{
                 groupName = _getCurrentNameByArgument(arguments[0])
             }
-            console.groupCollapsed(groupName,", "+ _getTimeHHMMSSMS());
+            console.groupCollapsed(groupName,"| "+ _getTimeHHMMSSMS());
 
-            console.log( outputArray);
+            let outputArray = [];
+            for (let i = (nameWasGiven ? 2 : 1); i < arguments.length; i++) {
+                outputArray.push(arguments[i]);
+            }
+            console.log(outputArray);
 
             if(that.enableTraceOnce || that.enableTrace){
                 console.trace()
