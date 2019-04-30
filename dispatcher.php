@@ -17,7 +17,7 @@ class Dispatcher
 
         // get the information
         $controller = $this->loadController();
-        $action = $this->request->action;
+        $action = $this->request->action.'Action';
         $params = $this->request->params;
 
         call_user_func_array([

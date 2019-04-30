@@ -1,8 +1,14 @@
 {
   "tablename": "Story",
-  "data" : [
+  "data": [
     "id",
+    "name",
+    "user_id",
+    "description",
+    "settings_default_id",
+    "settings_custom_id",
     "createdate",
-    "editdate"
+    "editdate",
+    "pages_id"
   ]
 }

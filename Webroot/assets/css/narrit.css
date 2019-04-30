@@ -1,0 +1,16 @@
+
+html,
+body {
+    background: #363636;
+    color: #f7f7f7;
+}
+body{
+    padding-top: 5rem;
+}
+.template.default{
+    padding: 3rem 1.5rem;
+    text-align: center;
+}
+textarea.cchiff {
+    display: none;
+}

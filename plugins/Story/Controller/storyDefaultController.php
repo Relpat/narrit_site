@@ -1,22 +1,15 @@
 <?php
 
-use \Narrit\Core\Controller\DefaultController;
-
-class storyController extends DefaultController
+class storyDefaultController extends DefaultController
 {
-    function indexAction()
+
+    function index()
     {
         $templateVars['storys'] = $this->model->getAll();
         $this->render("index");
     }
 
-    /**
-     * Edit function.
-     * Lets the Editor edit their Storys
-     *
-     * @param $id
-     */
-    function editAction($id)
+    function edit($id)
     {
         $modelInformation = $this->story->findById($id);
 
@@ -29,9 +22,10 @@ class storyController extends DefaultController
         $this->render("edit");
     }
 
-    function readAction($id)
-    {
+    function read($id){
         $modelInformation = $this->story->findById($id);
+
+        $this->_DEBUG->debug($modelInformation);
 
         $modelName = strtolower($this->getModelnameOfClassname());
         $templateVars[$modelName] = $modelInformation;
@@ -40,20 +34,6 @@ class storyController extends DefaultController
 
         $this->setVariables($templateVars);
         $this->render("read");
-    }
-
-    function saveAction()
-    {
-
-        $storyInformation = $_POST;
-
-        $storyId = $storyInformation['story_id'];
-        $pagesId = $storyInformation['pages_id'];
-        $partials = $storyInformation['partials'];
-
-        $modelInformation = $this->story->saveStory($storyId, $pagesId, $partials);
-
-        return $modelInformation;
     }
 }
 

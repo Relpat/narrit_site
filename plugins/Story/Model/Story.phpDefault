@@ -1,15 +1,7 @@
 <?php
 
-use Narrit\Story\StoryRepository;
-
 class Story extends DefaultModel
 {
-    function __construct()
-    {
-        parent::__construct(__FILE__);
-//        $this->repository = new StoryRepository(__FILE__);
-    }
-
     public function create($title, $description)
     {
         $sql = "INSERT INTO tasks (title, description, created_at, updated_at) VALUES (:title, :description, :created_at, :updated_at)";
@@ -28,10 +20,9 @@ class Story extends DefaultModel
                 FROM story
                   JOIN pages ON pages.story_id = story.id
                   JOIN partials on partials.pages_id = pages.id
-                WHERE story.id = " . $id;
+                WHERE story.id = ".$id;
         $req = Database::getBdd()->prepare($sql);
         $req->execute();
-
         return $req->fetchAll();
     }
 
@@ -48,34 +39,18 @@ class Story extends DefaultModel
         return $req->fetchAll();
     }
 
-    public function saveStory($storyId, $pageId, $partials)
+    public function edit($id, $title, $description)
     {
+        $sql = "UPDATE tasks SET title = :title, description = :description , updated_at = :updated_at WHERE id = :id";
 
-        $array = [];
-        foreach ($partials as $index => $partial) {
+        $req = Database::getBdd()->prepare($sql);
 
-            $partialId = $partial['id'];
-            $content = $partial['content'];
-
-            $sql = "UPDATE partials
-                    SET partials.content = :content
-                    WHERE partials.id = :partialId 
-                    AND partials.pages_id = :pagesId
-                    AND partials.story_id = :storyId
-                    "
-            ;
-            $req = Database::getBdd()->prepare($sql);
-
-            array_push(
-                $array,
-                $req->execute([
-                    'storyId' => $storyId,
-                    'pagesId' => $pageId,
-                    'partialId' => $partialId,
-                    'content' => $content
-                ]));
-        }
-        return $array;
+        return $req->execute([
+            'id' => $id,
+            'title' => $title,
+            'description' => $description,
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
     }
 }
 

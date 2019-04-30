@@ -12,11 +12,9 @@ use Narrit\Core\Repository\DefaultRepository;
 
 class StoryRepository extends DefaultRepository
 {
-    public $repository;
-
-    public function __construct()
+    public function __construct($file)
     {
-        parent::__construct();
+        parent::__construct($file);
     }
 
 

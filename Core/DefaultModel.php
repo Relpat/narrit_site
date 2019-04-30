@@ -6,16 +6,17 @@ class DefaultModel extends DefaultRepository
 {
     public $defaultRequestInformation = [];
     public $repository;
+    public $modelInformation;
     protected $id;
     protected $createdTime;
     protected $lastEdit;
 
-    function __construct()
+    function __construct($file)
     {
-        parent::__construct();
+        parent::__construct($file);
 //        DefaultModel::init();
 
-        $this->repository = new \Narrit\Core\Repository\DefaultRepository();
+//        $this->repository = new \Narrit\Core\Repository\DefaultRepository();
         $this->id;
 
     }

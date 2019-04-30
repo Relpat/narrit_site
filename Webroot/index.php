@@ -1,6 +1,6 @@
 <?php
 session_start();
-$homedirectory = "http://narrit.qwede.de/tell/login/default";
+$homedirectory = "http://narrit.qwede.de/story/read/1";
 
 //if login in session is not set
 if (!isset($_SESSION['login'])) {

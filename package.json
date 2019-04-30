@@ -5,17 +5,13 @@
   "version": "0.1.0",
   "devDependencies": {
     "bootstrap": "^4.3.1",
-    "grunt": "^1.0.4",
-    "grunt-contrib-jshint": "^2.1.0",
-    "grunt-contrib-nodeunit": "^2.0.0",
-    "grunt-contrib-uglify": "^4.0.1"
+    "grunt": "~0.4.5",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-nodeunit": "~0.4.1",
+    "grunt-contrib-uglify": "~0.5.0"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/Relpat/narrit_site.git"
-  },
-  "dependencies": {
-    "bootstrap": "^4.3.1",
-    "composer": "^4.1.0"
   }
 }

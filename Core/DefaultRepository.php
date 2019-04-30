@@ -12,9 +12,13 @@ use \Narrit\Core\CoreFunctions;
 
 class DefaultRepository extends CoreFunctions
 {
-    public function __construct()
+    protected $file;
+    public function __construct($file)
     {
         parent::__construct();
+        $this->file = $file;
+
+        $this->modelInformation = $this->getDatabaseModelInformation();
 //        $modelinformation = $this->getDatabaseModelInformation();
 
 //        $this->_DEBUG->debug($modelinformation);
@@ -26,10 +30,10 @@ class DefaultRepository extends CoreFunctions
      * E.g. "Story":
      * => StoryModelDatabaseObject.json
      */
-    protected function getDatabaseModelInformation($file = "")
+    protected function getDatabaseModelInformation()
     {
-        if($file !== ""){
-            $currentDir = $this->getCurrentDir($file) ."/";
+        if($this->file !== ""){
+            $currentDir = $this->getCurrentDir($this->file) ."/";
         }else{
             $currentDir = $this->getCurrentDir() ."/";
         }
