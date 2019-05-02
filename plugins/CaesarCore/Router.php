@@ -1,5 +1,6 @@
 <?php
 
+namespace Narrit\Plugins\CaesarCore;
 /**
  * Class Router
  */
@@ -16,14 +17,11 @@ class Router
     {
         $url = trim($url);
 
-        if ($url == "/PHP_Rush_MVC/")
-        {
+        if ($url == "/PHP_Rush_MVC/") {
             $request->controller = "tasks";
             $request->action = "index";
             $request->params = [];
-        }
-        else
-        {
+        } else {
             $explode_url = explode('/', $url);
             $explode_url = array_slice($explode_url, 1);
 
@@ -34,4 +32,5 @@ class Router
 
     }
 }
+
 ?>

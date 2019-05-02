@@ -6,15 +6,17 @@
  * Time: 19:28
  */
 
-namespace Narrit\Core;
-use Narrit\Settings\Settings;
+namespace Narrit\Plugins\CaesarCore;
+use Narrit\Plugins\CaesarCore\Functions\GeneralFunctions;
+use Narrit\Plugins\CaesarCore\Settings\Settings;
 
-class NarritCore
+class Core extends GeneralFunctions
 {
     protected $_SETTINGS;
 
     function __construct()
     {
+        parent::__construct();
         Core::init_core();
     }
 

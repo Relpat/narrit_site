@@ -1,0 +1,8 @@
+{
+  "tablename": "Base",
+  "data" : [
+    "id",
+    "createdate",
+    "editdate"
+  ]
+}

@@ -1,5 +1,6 @@
 <?php
 
+namespace Narrit\Plugins\CaesarCore;
 /**
  * Class Dispatcher
  */
@@ -17,7 +18,7 @@ class Dispatcher
 
         // get the information
         $controller = $this->loadController();
-        $action = $this->request->action.'Action';
+        $action = $this->request->action . 'Action';
         $params = $this->request->params;
 
         call_user_func_array([

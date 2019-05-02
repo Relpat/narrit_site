@@ -28,29 +28,18 @@ function CaeserChiffre() {
 
     function _setCurrentText(readText) {
         currentText = readText;
-        if (debugmode) {
-            buggy.message(arguments, "currentText", currentText);
-        }
     }
 
     function _parseText() {
         _readTextField();
         let currentText = _getCurrentText();
         let decodedText = Manipulator.htmlentities.decode(currentText);
-        buggy.message(arguments, "currentText", currentText);
-        buggy.message(arguments, "decodedText", decodedText);
-        buggy.message(arguments, "currentTextField", currentTextField);
         currentTextField.innerHTML = decodedText;
     };
 
     function _init(config) {
-        buggy.message(arguments, "Start CaesarChiffre with config", config);
         editForm = config.editForm;
-        if (debugmode) {
-            buggy = new Buggy();
-        }
 
-        buggy.message(arguments, "Schwubbel");
         // make html-content editable
         $(".cchiff-editable").attr("contenteditable", true);
 
@@ -61,7 +50,6 @@ function CaeserChiffre() {
             let editFields = document.querySelectorAll(".cchiff-editable");
             for (let element of editFields) {
                 element.addEventListener("click", function (index, data) {
-                    buggy.message(arguments, "change currentfield")
                     currentTextField = this;
                     _readTextField();
                 });
@@ -70,25 +58,24 @@ function CaeserChiffre() {
 
         function createInteractiveMenu() {
             let mainMenu = $("<div/>", {
-                "class": "btn-group-vertical position-fixed float-right",
+                "class": "position-fixed float-right",
                 "role": "group"
             }).css({
                 "top": "120px",
                 "right": "60px"
             })
             createElementButtons();
+            // createHeadlines();
             $(editForm).append(mainMenu);
 
             /**
              * create the Buttons
              */
             function createElementButtons() {
-                buggy.message(arguments, "that", that);
                 let buttonsConfig = {
                     "bold": {
                         config: {
                             "class": "btn btn-primary text-action-button font-weight-bold",
-                            "data-action-type": "bold",
                             "text": "bold",
                         },
                         action: {
@@ -109,16 +96,103 @@ function CaeserChiffre() {
                             })
                         }
                     },
+                    "unterline": {
+                        config: {
+                            "class": "btn btn-primary text-action-button",
+                            "data-action-type": "u",
+                            "text": "Underline",
+                        },
+                        action: {
+                            "click": (function () {
+                                Manipulator.selectedText.surroundWithTag("u")
+                            })
+                        }
+                    },
+                    "sup": {
+                        config: {
+                            "class": "btn btn-primary text-action-button",
+                            "data-action-type": "u",
+                            "text": "Hochstellen",
+                        },
+                        action: {
+                            "click": (function () {
+                                Manipulator.selectedText.surroundWithTag("sup")
+                            })
+                        }
+                    },
                 };
 
+                let buttonGroup = $("<div/>", {
+                    "class": "btn-group-vertical float-right button-group-font-style",
+                    "role": "group"
+                });
                 /**
                  * add buttons
                  */
                 for (let buttontype in buttonsConfig) {
                     let button = $("<button/>", buttonsConfig[buttontype].config);
                     $(button).on(buttonsConfig[buttontype].action);
-                    mainMenu.append(button);
+                    buttonGroup.append(button);
                 }
+
+                mainMenu.append(buttonGroup);
+            }
+
+            function createHeadlines(){
+                let texttypeConfig = {
+                "h1": {
+                    config: {
+                        "class": "btn btn-primary text-action-button",
+                            "data-action-type": "h1",
+                            "text": "h1",
+                    },
+                    action: {
+                        "click": (function () {
+                            Manipulator.selectedText.surroundWithTag("h1")
+                        })
+                    }
+                },
+                "h2": {
+                    config: {
+                        "class": "btn btn-primary text-action-button",
+                            "data-action-type": "h2",
+                            "text": "h2",
+                    },
+                    action: {
+                        "click": (function () {
+                            Manipulator.selectedText.surroundWithTag("h2")
+                        })
+                    }
+                },
+                "h3": {
+                    config: {
+                        "class": "btn btn-primary text-action-button",
+                            "data-action-type": "h3",
+                            "text": "h3",
+                    },
+                    action: {
+                        "click": (function () {
+                            Manipulator.selectedText.surroundWithTag("h3")
+                        })
+                    }
+                    }
+                };
+
+
+                let buttonGroup = $("<div/>", {
+                    "class": "btn-group-vertical float-right button-group-headlines",
+                    "role": "group"
+                });
+
+                /**
+                 * add buttons
+                 */
+                for (let buttontype in texttypeConfig) {
+                    let button = $("<button/>", texttypeConfig[buttontype].config);
+                    $(button).on(texttypeConfig[buttontype].action);
+                    buttonGroup.append(button);
+                }
+                mainMenu.append(buttonGroup);
             }
         }
     }
@@ -126,11 +200,9 @@ function CaeserChiffre() {
     let Manipulator = new _Manipulator();
 
     function _Manipulator() {
-        buggy.message(arguments, "init Manipulator");
         let that = this;
         return {
             htmlentities: function () {
-                buggy.message(arguments, "init htmlentities");
 
                 /**
                  * Converts a string to its html characters completely.
@@ -173,7 +245,6 @@ function CaeserChiffre() {
                 }
             }(),
             selectedText: function () {
-                buggy.message(arguments, "init selectedText");
 
                 /**
                  * Returns the selected string in the editable-content-area
@@ -184,7 +255,7 @@ function CaeserChiffre() {
                     let isEditableContent = false;
                     let selection = window.getSelection();
 
-                    if (currentTextField === selection.anchorNode.parentElement) {
+                    if (currentTextField.contains(selection.anchorNode.parentElement) || currentTextField === selection.anchorNode.parentElement) {
                         isEditableContent = true;
                     }
                     if (isEditableContent) {
@@ -202,14 +273,61 @@ function CaeserChiffre() {
                  * @param tag
                  */
                 function _surroundWithTag(tag) {
-                    if (_getSelection() === false) {
+                    if (typeof _getSelection() !== "object") {
                         return;
                     }
-                    let selectedText = _getSelection().toString();
-                    let surroundedText = "&lt;" + tag + "&gt;" + selectedText + "&lt;/" + tag + "&gt;";
+                    let selectedText = findTagNextToSelectionAndRemoveIt(_getSelection(),tag);
+                    if(selectedText === false){
+                        return;
+                    }
+                    let clearedText = findTagInSelectionAndRemoveIt(selectedText,tag);
+                    let surroundedText = "&lt;" + tag + "&gt;" + clearedText + "&lt;/" + tag + "&gt;";
+
+                    buggy.message(arguments, "selectedText", selectedText);
+                    buggy.message(arguments, "clearedText", clearedText);
+                    buggy.message(arguments, "surroundedText", surroundedText);
 
                     replaceSelectedText(surroundedText);
                     _parseText();
+
+                    /**
+                     * removes the tag in the selected replacement string
+                     * @param replacementText
+                     * @param tag
+                     * @return {String}
+                     */
+                    function findTagInSelectionAndRemoveIt(replacementText, tag) {
+                        let encoded = Manipulator.htmlentities.encode(replacementText);
+
+                        let tagBegin = new RegExp("&lt;" + tag + "&gt;", "g");
+                        let tagEnd = new RegExp("&lt;/" + tag + "&gt;", "g");
+
+                        return Manipulator.htmlentities.decode(String(encoded)
+                            .replace(tagBegin, '')
+                            .replace(tagEnd, ''));
+                    }
+
+                    /**
+                     * gets the parentNode of the Selection and removes the given tag
+                     *
+                     * @param selection
+                     * @param tag
+                     * @return {Selection|boolean}
+                     */
+                    function findTagNextToSelectionAndRemoveIt(selection,tag) {
+                        console.log(selection);
+                        console.log(typeof selection);
+                        if(selection.type !== "Range"){
+                                return false;
+                        }
+                        console.log(selection.anchorNode.parentElement.tagName);
+                        // parent is tag, remove
+                        if(selection.anchorNode.parentElement.tagName.toUpperCase() === tag.toUpperCase()){
+                            selection.anchorNode.parentElement.outerHTML = selection.anchorNode.parentElement.innerHTML;
+                            console.log("done",selection);
+                        }
+                        return selection;
+                    }
 
                     /**
                      * source: https://stackoverflow.com/questions/3997659/replace-selected-text-in-contenteditable-div
@@ -224,12 +342,10 @@ function CaeserChiffre() {
                                 range.deleteContents();
                                 range.insertNode(document.createTextNode(replacementText));
                             }
-                        } else if (document.selection && document.selection.createRange) {
-                            range = document.selection.createRange();
-                            range.text = replacementText;
                         }
                     }
                 }
+
 
                 /**
                  * Return namespace-declaration
@@ -237,7 +353,6 @@ function CaeserChiffre() {
                 return {
                     getSelection: _getSelection,
                     surroundWithTag: _surroundWithTag
-
                 }
             }()
         }
@@ -251,47 +366,5 @@ function CaeserChiffre() {
         init: (function (config) {
             _init(config)
         })
-    }
-}
-
-
-/**
- * easy debugger
- * @constructor
- */
-function Buggy() {
-    console.log("Buggy enabled");
-    let that = this;
-
-    function _getCurrentNameByArgument(args) {
-        let myName = args.callee.toString();
-        myName = myName.substr('function '.length);
-        myName = myName.substr(0, myName.indexOf('('));
-        return myName;
-    }
-
-    function _message(args) {
-        let argumentArray = Array.from(arguments);
-        if (argumentArray.length) {
-
-            let outputArray = [];
-            for (let i = 1; i < arguments.length; i++) {
-                outputArray.push(arguments[i]);
-            }
-            console.log(_getTimeHHMMSSMS(), _getCurrentNameByArgument(arguments[0]) + ": ", outputArray);
-        }
-    }
-
-    function _getTimeHHMMSSMS() {
-        date = new Date();
-        hh = date.getHours()
-        mm = date.getMinutes();
-        ss = date.getSeconds();
-        ms = date.getMilliseconds();
-        return (hh + ":" + mm + ":" + ss + "." + ms);
-    }
-
-    return {
-        message: _message,
     }
 }

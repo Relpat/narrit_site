@@ -1,4 +1,5 @@
 <?
+namespace Narrit\Plugins\CaesarCore\Model;
 use \Narrit\Core\Core;
 
 class Model extends Core
